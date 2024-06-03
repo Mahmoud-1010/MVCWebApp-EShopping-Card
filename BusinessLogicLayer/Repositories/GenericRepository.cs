@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,28 +19,54 @@ namespace BusinessLogicLayer.Repositories
         {
             _context = applicationDBContext;
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression=null, string IncludeWord=null)
         {
-            return await _context.Set<T>().ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+            if (IncludeWord != null)
+            {
+                foreach (var item in IncludeWord.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(item);
+                }
+            }
+            return await query.ToListAsync();
+
         }
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression = null, string IncludeWord = null)
         {
-            return await _context.Set<T>().FindAsync(id);
+            IQueryable<T> query = _context.Set<T>();
+            if (expression != null)
+            {
+                query = query.Where(expression);
+            }
+            if (IncludeWord != null)
+            {
+                foreach (var item in IncludeWord.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(item);
+                }
+            }
+            return await query.SingleOrDefaultAsync();
         }
         public async Task<int> InsertAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
             return await _context.SaveChangesAsync();
         }
-        public async Task<int> UpdateAsync(T entity)
-        {
-            _context.Set<T>().Update(entity);
-            return await _context.SaveChangesAsync();
-        }
+
         public async Task<int> DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteByRange(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
         }
     }
 }

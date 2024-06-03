@@ -1,4 +1,7 @@
+using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Repositories;
 using DataAccessLayer.Context;
+using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace PresentationLayer
@@ -14,7 +17,7 @@ namespace PresentationLayer
 
             builder.Services.AddDbContext<ApplicationDBContext>(options 
                 =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            builder.Services.AddScoped(typeof(IGenericRepository<Product>),typeof(GenericRepository<Product>));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
