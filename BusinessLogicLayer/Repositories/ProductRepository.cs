@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Context;
 using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,20 +18,7 @@ namespace BusinessLogicLayer.Repositories
         {
             _context = context;
         }
-        public async Task<int> UpdateAsync(Product product)
-        {
-            var productInDb = _context.Products.FirstOrDefault(c => c.Id == product.Id);
-            if (productInDb == null)
-            {
-                productInDb.Name = product.Name;
-                productInDb.Description = product.Description;
-                productInDb.Price = product.Price;
-                productInDb.ImageUrl = product.ImageUrl;
-                productInDb.CategoryId = product.CategoryId;
-            }
-
-            _context.Products.Update(productInDb);
-            return await _context.SaveChangesAsync();
-        }
+        public async Task<IEnumerable<Product>> Search(string Name)
+            => await _context.Products.Where(P => P.Name.Contains(Name)).ToListAsync();
     }
 }

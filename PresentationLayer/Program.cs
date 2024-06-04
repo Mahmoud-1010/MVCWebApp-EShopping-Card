@@ -24,6 +24,7 @@ namespace PresentationLayer
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new CategoryProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
 
 
             var app = builder.Build();

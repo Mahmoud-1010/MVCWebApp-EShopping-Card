@@ -19,7 +19,7 @@ namespace BusinessLogicLayer.Repositories
         {
             _context = applicationDBContext;
         }
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression=null, string IncludeWord=null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? expression=null, string? IncludeWord=null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (expression != null)

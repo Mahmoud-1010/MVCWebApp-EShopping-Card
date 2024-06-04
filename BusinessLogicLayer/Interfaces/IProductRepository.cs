@@ -10,5 +10,7 @@ namespace BusinessLogicLayer.Interfaces
     public interface IProductRepository:IGenericRepository<Product>
     {
         //Task<int> UpdateAsync(Product product);
+        public Task<IEnumerable<Product>> Search(string Name);
+
     }
 }
