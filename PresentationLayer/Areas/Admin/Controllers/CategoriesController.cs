@@ -20,13 +20,13 @@ namespace PresentationLayer.Areas.Admin.Controllers
         // GET: CategoriesController
         public async Task<ActionResult> Index()
         {
-            var categories =await _UnitOfWork.CategoryRepository.GetAllAsync();
+            var categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
             List<CateegoryViewModel> categoryVM = new List<CateegoryViewModel>();
             foreach (var item in categoryVM)
             {
 
             }
-            
+
             return View(categories);
         }
 
@@ -37,7 +37,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
         }
 
         // GET: CategoriesController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
