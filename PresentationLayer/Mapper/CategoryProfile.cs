@@ -8,7 +8,7 @@ namespace PresentationLayer.Mapper
     {
         public CategoryProfile()
         {
-            CreateMap<CateegoryViewModel, Category>().ReverseMap();
+            CreateMap<CategoryViewModel, Category>().ReverseMap();
         }
     }
 }

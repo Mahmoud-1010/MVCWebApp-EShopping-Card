@@ -2,7 +2,7 @@
 
 namespace PresentationLayer.Models
 {
-    public class CateegoryViewModel
+    public class CategoryViewModel
     {
         public int Id { get; set; }
         [Required]

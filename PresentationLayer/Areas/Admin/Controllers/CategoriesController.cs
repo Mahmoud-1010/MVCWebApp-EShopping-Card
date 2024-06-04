@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Repositories;
+using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
@@ -18,22 +20,21 @@ namespace PresentationLayer.Areas.Admin.Controllers
             Mapper = mapper;
         }
         // GET: CategoriesController
-        public async Task<ActionResult> Index()
+        // all list and searched list
+        public async Task<ActionResult> Index(string SearchValue = "")
         {
-            var categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
-            List<CateegoryViewModel> categoryVM = new List<CateegoryViewModel>();
-            foreach (var item in categoryVM)
+            if (string.IsNullOrEmpty(SearchValue))
             {
-
+                IEnumerable<Category> categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
+                List<CategoryViewModel> categoriesVM = Mapper.Map<IEnumerable<Category>, List<CategoryViewModel>>(categories);
+                return View(categoriesVM);
             }
-
-            return View(categories);
-        }
-
-        // GET: CategoriesController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+            else
+            {
+                var categories = await _UnitOfWork.CategoryRepository.Search(SearchValue);
+                var MappedCategories = Mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(categories);
+                return View(MappedCategories);
+            }
         }
 
         // GET: CategoriesController/Create
@@ -45,58 +46,77 @@ namespace PresentationLayer.Areas.Admin.Controllers
         // POST: CategoriesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CategoryViewModel cateegoryVM)
         {
-            try
+            if (ModelState.IsValid)
             {
+                var MapedCategory = Mapper.Map<CategoryViewModel, Category>(cateegoryVM);
+                await _UnitOfWork.CategoryRepository.InsertAsync(MapedCategory);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(cateegoryVM);
         }
 
         // GET: CategoriesController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+            Category category = await _UnitOfWork.CategoryRepository.GetByIdAsync(p => p.Id == id);
+            CategoryViewModel categoryVM = Mapper.Map<Category, CategoryViewModel>(category);
+            return View(categoryVM);
         }
 
         // POST: CategoriesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CategoryViewModel categoryVM)
         {
-            try
+            //if(id!=categoryVM.Id)
+            //    return NotFound();
+            if (ModelState.IsValid)
             {
+
+                Category MapedCategory = Mapper.Map<CategoryViewModel, Category>(categoryVM);
+
+                await _UnitOfWork.CategoryRepository.Update(MapedCategory);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(categoryVM);
         }
 
         // GET: CategoriesController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+                return NotFound();
+            var Category = await _UnitOfWork.CategoryRepository.GetByIdAsync(p=>p.Id==id);
+            if (Category == null)
+                return NotFound();
+            var MappedCategory = Mapper.Map<Category, CategoryViewModel>(Category);
+
+            return View(MappedCategory);
         }
 
-        // POST: CategoriesController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id, CategoryViewModel categoryVM)
         {
+            if (id != categoryVM.Id)
+                return NotFound();
             try
             {
+
+                var MappedCategoery = Mapper.Map<CategoryViewModel, Category>(categoryVM);
+                
+                await _UnitOfWork.CategoryRepository.DeleteAsync(MappedCategoery);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(categoryVM);
             }
         }
+
     }
 }

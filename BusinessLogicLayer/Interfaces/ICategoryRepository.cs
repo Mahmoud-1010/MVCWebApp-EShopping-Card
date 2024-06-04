@@ -9,6 +9,7 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface ICategoryRepository:IGenericRepository<Category>
     {
-        Task<int> UpdateAsync(Category category);
+        //Task<int> UpdateAsync(Category category);
+        public Task<IEnumerable<Category>> Search(string Name);
     }
 }

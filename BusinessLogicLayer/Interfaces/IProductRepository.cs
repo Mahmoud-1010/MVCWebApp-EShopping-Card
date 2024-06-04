@@ -9,6 +9,6 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IProductRepository:IGenericRepository<Product>
     {
-        Task<int> UpdateAsync(Product product);
+        //Task<int> UpdateAsync(Product product);
     }
 }

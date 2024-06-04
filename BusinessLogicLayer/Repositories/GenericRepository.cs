@@ -36,7 +36,7 @@ namespace BusinessLogicLayer.Repositories
             return await query.ToListAsync();
 
         }
-        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression = null, string IncludeWord = null)
+        public async Task<T> GetByIdAsync( Expression<Func<T, bool>>? expression = null, string? IncludeWord = null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (expression != null)
@@ -67,6 +67,13 @@ namespace BusinessLogicLayer.Repositories
         public Task<int> DeleteByRange(IEnumerable<T> entities)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> Update(T entity)
+        {
+             _context.Set<T>().Update(entity);
+            return await _context.SaveChangesAsync();
+
         }
     }
 }

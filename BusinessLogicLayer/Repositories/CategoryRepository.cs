@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Context;
 using DataAccessLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,19 +19,9 @@ namespace BusinessLogicLayer.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Category>> Search(string Name)
+            => await _context.Categories.Where(C => C.Name.Contains(Name)).ToListAsync();
 
-        public async Task<int> UpdateAsync(Category category)
-        {
-            var categoryInDb= _context.Categories.FirstOrDefault(c=>c.Id==category.Id);
-            if (categoryInDb == null)
-            {
-                categoryInDb.Name = category.Name;
-                categoryInDb.Description = category.Description;
-                categoryInDb.CreatedDate = DateTime.Now;
-            }
 
-            _context.Categories.Update(categoryInDb);
-            return await _context.SaveChangesAsync();
-        }
     }
 }
