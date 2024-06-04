@@ -11,12 +11,13 @@ namespace BusinessLogicLayer.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         public ApplicationDBContext _context { get; }
-        public ICategoryRepository Category { get; private set; }
+        public ICategoryRepository CategoryRepository { get; private set; }
+        public IProductRepository ProductRepository { get; private set; }
 
-        public UnitOfWork(ApplicationDBContext context)
+        public UnitOfWork(ICategoryRepository categoryRepository,IProductRepository productRepository)
         {
-            _context = context;
-            Category =new CategoryRepository(context);
+            CategoryRepository = categoryRepository;
+            ProductRepository = productRepository;
         }
 
 

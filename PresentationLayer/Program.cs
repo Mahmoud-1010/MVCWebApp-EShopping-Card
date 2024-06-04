@@ -18,6 +18,10 @@ namespace PresentationLayer
             builder.Services.AddDbContext<ApplicationDBContext>(options 
                 =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped(typeof(IGenericRepository<Product>),typeof(GenericRepository<Product>));
+            
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,7 +41,7 @@ namespace PresentationLayer
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area=Admin}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

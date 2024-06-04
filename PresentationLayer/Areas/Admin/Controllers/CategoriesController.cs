@@ -1,9 +1,11 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.Models;
 
-namespace PresentationLayer.Controllers
+namespace PresentationLayer.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoriesController : Controller
     {
         public IUnitOfWork _UnitOfWork { get; }
@@ -15,8 +17,14 @@ namespace PresentationLayer.Controllers
         // GET: CategoriesController
         public async Task<ActionResult> Index()
         {
-            var categories = _UnitOfWork.Category.GetAllAsync();
-            return View();
+            var categories =await _UnitOfWork.CategoryRepository.GetAllAsync();
+            List<CateegoryViewModel> categoryVM = new List<CateegoryViewModel>();
+            foreach (var item in categoryVM)
+            {
+
+            }
+            
+            return View(categories);
         }
 
         // GET: CategoriesController/Details/5

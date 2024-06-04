@@ -20,9 +20,9 @@ namespace DataAccessLayer.Entities
         [Range(0, double.MaxValue)] // Ensures non-negative price
         public decimal Price { get; set; }
         //[DisplayName("Select Image")]
-        //public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
         [ForeignKey("Category")]
-        public int? CategoryId { get; set; } // Foreign key for Category relationship
+        public int CategoryId { get; set; } // Foreign key for Category relationship
         public virtual Category Category { get; set; } // Navigation property for Category
     }
 }

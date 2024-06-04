@@ -29,7 +29,7 @@ namespace BusinessLogicLayer.Repositories
                 categoryInDb.CreatedDate = DateTime.Now;
             }
 
-            _context.Categories.Update(category);
+            _context.Categories.Update(categoryInDb);
             return await _context.SaveChangesAsync();
         }
     }
