@@ -1,4 +1,5 @@
-﻿using BusinessLogicLayer.Interfaces;
+﻿using AutoMapper;
+using BusinessLogicLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
@@ -9,10 +10,12 @@ namespace PresentationLayer.Areas.Admin.Controllers
     public class CategoriesController : Controller
     {
         public IUnitOfWork _UnitOfWork { get; }
+        public IMapper Mapper { get; }
 
-        public CategoriesController(IUnitOfWork unitOfWork)
+        public CategoriesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _UnitOfWork = unitOfWork;
+            Mapper = mapper;
         }
         // GET: CategoriesController
         public async Task<ActionResult> Index()

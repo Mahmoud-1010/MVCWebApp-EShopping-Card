@@ -3,6 +3,7 @@ using BusinessLogicLayer.Repositories;
 using DataAccessLayer.Context;
 using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using PresentationLayer.Mapper;
 
 namespace PresentationLayer
 {
@@ -22,6 +23,9 @@ namespace PresentationLayer
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddAutoMapper(M => M.AddProfile(new CategoryProfile()));
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
