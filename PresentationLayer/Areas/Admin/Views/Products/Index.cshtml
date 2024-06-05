@@ -1,15 +1,25 @@
 ﻿@model IEnumerable<PresentationLayer.Models.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.PageTitle = "Manage Products";
+    ViewBag.CardTitle = "List Of Products";
     Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New Product</a>
 </p>
+<form class="my-3" asp-action="Index" asp-controller="Categories">
+    <div class="row">
+        <div class="col-sm-8">
+            <input placeholder="Search By Name" name="SearchValue" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <input type="submit" value="Search" class="btn btn-success btn-block" />
+        </div>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>

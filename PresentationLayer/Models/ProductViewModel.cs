@@ -14,10 +14,11 @@ namespace PresentationLayer.Models
         [Required]// Ensures non-negative price
         [DataType(DataType.Currency)]
         public decimal Price { get; set; }
-        
+        [DisplayName("Image")]
         [ValidateNever]
         public string ImageUrl { get; set; }
         public IFormFile Image { get; set; }
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
 
     }

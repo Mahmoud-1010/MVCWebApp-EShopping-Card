@@ -9,6 +9,7 @@ namespace PresentationLayer.Mapper
         public ProductProfile()
         {
             CreateMap<ProductViewModel,Product>().ReverseMap();
+            CreateMap<ShoppingItemViewModel,Product>().ReverseMap();
         }
     }
 }

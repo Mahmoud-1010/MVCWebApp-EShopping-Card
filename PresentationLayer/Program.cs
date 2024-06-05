@@ -43,13 +43,34 @@ namespace PresentationLayer
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //      name: "default",
+            //    pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}"
+            //    );
+            //    endpoints.MapControllerRoute(
+            //      name: "Customer",
+            //    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
+            //    );
+            //    endpoints.MapControllerRoute(
+            //      name: "Customers",
+            //    pattern: "{area=Customers}/{controller=Home}/{action=Index}/{id?}"
+            //    );
+            //});
             app.MapControllerRoute(
                 name: "Customer",
-                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            app.MapControllerRoute(
+                name: "Customers",
+                pattern: "{area=Customers}/{controller=Home}/{action=Index}/{id?}"
+                );
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}"
+                );
+            
             app.Run();
         }
     }
