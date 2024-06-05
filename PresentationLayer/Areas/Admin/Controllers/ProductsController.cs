@@ -4,6 +4,7 @@ using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PresentationLayer.Helper;
 using PresentationLayer.Models;
 
 namespace PresentationLayer.Areas.Admin.Controllers
@@ -15,7 +16,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
         public IMapper Mapper { get; }
         public IWebHostEnvironment _webHostEnvironment { get; }
 
-        public ProductsController(IUnitOfWork unitOfWork, IMapper mapper,IWebHostEnvironment webHostEnvironment)
+        public ProductsController(IUnitOfWork unitOfWork, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _UnitOfWork = unitOfWork;
             Mapper = mapper;
@@ -43,45 +44,25 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
         public async Task<IActionResult> Create()
         {
-
             ViewBag.categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
-             
-            Console.WriteLine();
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductViewModel productVM,IFormFile file)
+        public async Task<IActionResult> Create(ProductViewModel productVM, IFormFile image)
         {
             if (ModelState.IsValid)
             {
-                string RootPath = _webHostEnvironment.WebRootPath;
-                if(file != null) 
-                {
-                    string fileName = Guid.NewGuid().ToString();
-                    var Upload = Path.Combine(RootPath, @"Images/Products/");
-                    var ext = Path.GetExtension(file.FileName);
-                    using (var fileStream = new FileStream(Path.Combine(Upload, fileName, ext),FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    productVM.ImageUrl = @"Images/Products/" + fileName + ext;
-                }
-                
-                Product MappedProduct = Mapper.Map<ProductViewModel,Product>(productVM);
-                
+                productVM.CategoryId = 3;
+                productVM.ImageUrl= DocumentSettings.UploadFile(productVM.Image, "Images");
+                Product MappedProduct = Mapper.Map<ProductViewModel, Product>(productVM);
+
                 await _UnitOfWork.ProductRepository.InsertAsync(MappedProduct);
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
             return View(productVM);
         }
-        //public IActionResult testCreate()
-        //{
-        //    List<Category> Categories =  GetAllAsync();
-        //    ViewBag.categories = Categories;
-        //    return View();
-        //}
 
 
     }

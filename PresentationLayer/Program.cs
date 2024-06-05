@@ -16,10 +16,10 @@ namespace PresentationLayer
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<ApplicationDBContext>(options 
-                =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped(typeof(IGenericRepository<Product>),typeof(GenericRepository<Product>));
-            
+            builder.Services.AddDbContext<ApplicationDBContext>(options
+                => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -47,7 +47,9 @@ namespace PresentationLayer
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}");
-
+            app.MapControllerRoute(
+                name: "Customer",
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
             app.Run();
         }
     }
