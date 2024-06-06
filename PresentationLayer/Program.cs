@@ -5,6 +5,8 @@ using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Mapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using PresentationLayer.Helper;
 
 namespace PresentationLayer
 {
@@ -16,12 +18,12 @@ namespace PresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            //builder.Services.AddRazorPages()
-            //                .AddRazorRuntimeCompilation();
+            builder.Services.AddRazorPages();
             builder.Services.AddDbContext<ApplicationDBContext>(options
                 => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDBContext>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDBContext>();
             builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -29,7 +31,7 @@ namespace PresentationLayer
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new CategoryProfile()));
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
-
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
             var app = builder.Build();
 
@@ -47,34 +49,17 @@ namespace PresentationLayer
             app.UseRouting();
 
             app.UseAuthorization();
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //      name: "default",
-            //    pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}"
-            //    );
-            //    endpoints.MapControllerRoute(
-            //      name: "Customer",
-            //    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
-            //    );
-            //    endpoints.MapControllerRoute(
-            //      name: "Customers",
-            //    pattern: "{area=Customers}/{controller=Home}/{action=Index}/{id?}"
-            //    );
-            //});
-            app.MapControllerRoute(
-                name: "Customer",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
-            app.MapControllerRoute(
-                name: "Customers",
-                pattern: "{area=Customers}/{controller=Home}/{action=Index}/{id?}"
-                );
+            app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
+                );
+
+            app.MapControllerRoute(
+                name: "Admin",
                 pattern: "{area=Admin}/{controller=Categories}/{action=Index}/{id?}"
                 );
-            
+
             app.Run();
         }
     }
