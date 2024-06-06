@@ -4,6 +4,7 @@ using DataAccessLayer.Context;
 using DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using PresentationLayer.Mapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace PresentationLayer
 {
@@ -15,9 +16,12 @@ namespace PresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            //builder.Services.AddRazorPages()
+            //                .AddRazorRuntimeCompilation();
             builder.Services.AddDbContext<ApplicationDBContext>(options
                 => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDBContext>();
             builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
