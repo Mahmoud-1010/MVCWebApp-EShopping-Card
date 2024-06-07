@@ -34,6 +34,7 @@ namespace PresentationLayer
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new CategoryProfile()));
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(C=>C.AddProfile(new CartProfile()));
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
             var app = builder.Build();

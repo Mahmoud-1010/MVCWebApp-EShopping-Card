@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataAccessLayer.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PresentationLayer.Models
@@ -16,6 +17,10 @@ namespace PresentationLayer.Models
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
         [Range(1, 100,ErrorMessage ="You Can't buy more tham 100 Item")]
+        public virtual Category Category { get; set; } // Navigation property for Category
+
         public int Count { get; set; }
+        public int ProductId { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }
