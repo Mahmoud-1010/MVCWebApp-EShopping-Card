@@ -14,10 +14,13 @@ namespace BusinessLogicLayer.Repositories
         public ICategoryRepository CategoryRepository { get; private set; }
         public IProductRepository ProductRepository { get; private set; }
 
-        public UnitOfWork(ICategoryRepository categoryRepository,IProductRepository productRepository)
+        public IShoppingCartRepository ShoppingCartRepository {  get; private set; }
+
+        public UnitOfWork(ICategoryRepository categoryRepository,IProductRepository productRepository, IShoppingCartRepository shoppingCartRepository)
         {
             CategoryRepository = categoryRepository;
             ProductRepository = productRepository;
+            ShoppingCartRepository = shoppingCartRepository;
         }
 
 
