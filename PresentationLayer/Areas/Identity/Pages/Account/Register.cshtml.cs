@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using PresentationLayer.Helper;
 
 namespace PresentationLayer.Areas.Identity.Pages.Account
@@ -131,17 +132,28 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                user.Address=Input.Address;
-                user.Name=Input.Name;
-                user.City=Input.City;
+                user.Address = Input.Address;
+                user.Name = Input.Name;
+                user.City = Input.City;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, SD.CustomerRole);
-                     
+                    string role = HttpContext.Request.Form["RoleRadio"].ToString();
+                    if (string.IsNullOrEmpty(role))
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.CustomerRole);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, role);
+                        return RedirectToAction("Index", "Users", new { area = "Admin" });
+                    }
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -160,8 +172,7 @@ namespace PresentationLayer.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        
                     }
                 }
                 foreach (var error in result.Errors)

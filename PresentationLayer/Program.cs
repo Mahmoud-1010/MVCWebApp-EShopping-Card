@@ -22,7 +22,9 @@ namespace PresentationLayer
             builder.Services.AddDbContext<ApplicationDBContext>(options
                 => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options
+                =>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromDays(4))
+                .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDBContext>();
             builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
 
@@ -47,8 +49,9 @@ namespace PresentationLayer
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            //app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
