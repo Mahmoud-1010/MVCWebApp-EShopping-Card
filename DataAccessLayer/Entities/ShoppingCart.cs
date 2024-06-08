@@ -11,14 +11,14 @@ namespace DataAccessLayer.Entities
     public class ShoppingCart
     {
         public int Id { get; set; }
-        //[ForeignKey("Product")]
+        [ForeignKey("Product")]
         public int ProductId { get; set; }
         
-        //public virtual Product Product { get; set; }
+        public virtual Product Product { get; set; }
         public int Count { get; set; }
-        //[ForeignKey("ApplicationUser")]
+        [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
         
-        //public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

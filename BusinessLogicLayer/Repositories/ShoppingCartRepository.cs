@@ -29,6 +29,8 @@ namespace BusinessLogicLayer.Repositories
         public int DecreaseCount(ShoppingCart shoppingCart, int count)
         {
             shoppingCart.Count -= count;
+            _context.SaveChanges();
+
             return shoppingCart.Count;
         }
 
