@@ -71,7 +71,9 @@ namespace BusinessLogicLayer.Repositories
 
         public async Task<int> Update(T entity)
         {
-             _context.Set<T>().Update(entity);
+            //_context.Set<T>().Attach(entity);
+            //_context.Entry(entity).State = EntityState.Modified;
+            _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync();
 
         }

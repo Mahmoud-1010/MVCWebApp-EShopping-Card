@@ -29,9 +29,12 @@ namespace PresentationLayer.Areas.Customer.Controllers
         }
         public async Task<IActionResult> Details(int id)
         {
-            var product =await _unitOfWork.ProductRepository.GetByIdAsync(P=>P.Id==id,IncludeWord:"Category");
+            var product = await _unitOfWork.ProductRepository.GetByIdAsync(P => P.Id == id, IncludeWord: "Category");
             ShoppingItemViewModel shoppingItem = Mapper.Map<Product, ShoppingItemViewModel>(product);
             shoppingItem.ProductId = id;
+            //var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            //shoppingItem.ApplicationUserId = claim.Value;
             return View(shoppingItem);
         }
         [HttpPost]
@@ -39,14 +42,26 @@ namespace PresentationLayer.Areas.Customer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(ShoppingItemViewModel shoppingItem)
         {
-            //var product = await _unitOfWork.ProductRepository.GetByIdAsync(P => P.Id == id);
-            //ShoppingItemViewModel shoppingItem = Mapper.Map<Product, ShoppingItemViewModel>(product);
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingItem.ApplicationUserId = claim.Value;
             ShoppingCart shoppingCart = Mapper.Map<ShoppingItemViewModel, ShoppingCart>(shoppingItem);
-            await _unitOfWork.ShoppingCartRepository.InsertAsync(shoppingCart);
-            
+
+            ShoppingCart cartobj = await _unitOfWork.ShoppingCartRepository.GetByIdAsync(
+                U => U.ApplicationUserId == claim.Value &&
+                     U.ProductId == shoppingCart.ProductId);
+
+            if (cartobj == null)
+            {
+                await _unitOfWork.ShoppingCartRepository.InsertAsync(shoppingCart);
+            }
+            else
+            {
+               _unitOfWork.ShoppingCartRepository.IncreaseCount(cartobj, shoppingCart.Count);
+
+                //await _unitOfWork.ShoppingCartRepository.Update(shoppingCart);
+            }
+            //_unitOfWork.Complete();
             return RedirectToAction(nameof(Index));
         }
     }
