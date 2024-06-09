@@ -16,11 +16,19 @@ namespace BusinessLogicLayer.Repositories
 
         public IShoppingCartRepository ShoppingCartRepository {  get; private set; }
 
-        public UnitOfWork(ICategoryRepository categoryRepository,IProductRepository productRepository, IShoppingCartRepository shoppingCartRepository)
+        public IOrderHeaderRepository OrderHeaderRepository {  get; private set; }
+        public IOrderDetailsRepository OrderDetailsRepository { get; private set; }
+        public UnitOfWork(ICategoryRepository categoryRepository,
+            IProductRepository productRepository, 
+            IShoppingCartRepository shoppingCartRepository,
+            IOrderHeaderRepository orderHeaderRepository,
+            IOrderDetailsRepository orderDetailsRepository)
         {
             CategoryRepository = categoryRepository;
             ProductRepository = productRepository;
             ShoppingCartRepository = shoppingCartRepository;
+            OrderHeaderRepository = orderHeaderRepository;
+            OrderDetailsRepository = orderDetailsRepository;
         }
 
 

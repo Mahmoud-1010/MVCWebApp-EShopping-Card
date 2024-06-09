@@ -11,6 +11,8 @@ namespace BusinessLogicLayer.Interfaces
         ICategoryRepository CategoryRepository { get; }
         IProductRepository ProductRepository { get; }
         IShoppingCartRepository ShoppingCartRepository { get; }
+        IOrderHeaderRepository OrderHeaderRepository { get; }
+        IOrderDetailsRepository OrderDetailsRepository { get; }
         int Complete();
     }
 }
