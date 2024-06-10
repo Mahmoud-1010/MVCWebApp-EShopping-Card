@@ -1,16 +1,12 @@
-﻿@{
+﻿@model IEnumerable<OrderHeader>
+@{
     ViewData["Title"] = "Index";
 }
-<style>
-    *{
-        text-align:center;
-    }
 
-</style>
-<table id="mytable" class="table table-hover" >
+<table id="mytable" class="table table-hover">
     <thead>
-        <tr class="text-center">
-            <td >id</td>
+        <tr >
+            <td>id</td>
             <td>Name</td>
             <td>Phone</td>
             <td>Email</td>
@@ -19,8 +15,19 @@
             <td>Action</td>
         </tr>
     </thead>
-</table>
+    <tbody>
 
-@section Scripts{
-    <script src="~/js/order.js"></script>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.ApplicationUser.Name</td>
+                <td>@item.ApplicationUser.PhoneNumber</td>
+                <td>@item.ApplicationUser.Email</td>
+                <td>@item.OrderStatus</td>
+                <td>@item.TotalPrice</td>
+                <td><a asp-action="Details" asp-route-orderId="@item.Id" class="btn btn-primary">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

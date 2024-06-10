@@ -13,7 +13,7 @@ namespace BusinessLogicLayer.Repositories
     {
         public ApplicationDBContext _context { get; }
 
-        public OrderHeaderRepository(ApplicationDBContext context):base(context) 
+        public OrderHeaderRepository(ApplicationDBContext context) : base(context)
         {
             _context = context;
         }
@@ -22,8 +22,17 @@ namespace BusinessLogicLayer.Repositories
         public void UpdateOrderStatus(int id, string OrderStatus, string PaymentStatus)
         {
             var orderHeader = _context.OrderHeaders.FirstOrDefault(O => O.Id == id);
-            orderHeader.OrderStatus = OrderStatus;
-            orderHeader.PaymentStatus = PaymentStatus;
+            if (orderHeader != null)
+            {
+                orderHeader.OrderStatus = OrderStatus;
+
+                orderHeader.PaymentDate = DateTime.Now;
+                if (PaymentStatus != null)
+                {
+                    orderHeader.PaymentStatus = PaymentStatus;
+                }
+            }
+
             _context.SaveChanges();
         }
     }

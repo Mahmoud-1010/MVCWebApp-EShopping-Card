@@ -20,9 +20,10 @@ function loadData() {
             {
                 "data": "id",
                 "render": function (data) {
-                    return '<a asp-action="Details" asp-route-id="data" class="btn btn-primary" > Details</a>'
+                    return '<a href="/Admin/Orders/Details?orderid=${data}" class="btn btn-primary" > v dfvDetails</a>'
                 }
             }
         ]
     });
 }
+//<a href="/Admin/Orders/Details?orderid=${data}" class="btn btn-primary" > Details</a>
