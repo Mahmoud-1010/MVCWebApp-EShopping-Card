@@ -18,17 +18,22 @@ namespace BusinessLogicLayer.Repositories
 
         public IOrderHeaderRepository OrderHeaderRepository {  get; private set; }
         public IOrderDetailsRepository OrderDetailsRepository { get; private set; }
+
+        public IApplicationUserRepository ApplicationUserRepository { get; private set; }
+
         public UnitOfWork(ICategoryRepository categoryRepository,
             IProductRepository productRepository, 
             IShoppingCartRepository shoppingCartRepository,
             IOrderHeaderRepository orderHeaderRepository,
-            IOrderDetailsRepository orderDetailsRepository)
+            IOrderDetailsRepository orderDetailsRepository,
+            IApplicationUserRepository applicationUserRepository)
         {
             CategoryRepository = categoryRepository;
             ProductRepository = productRepository;
             ShoppingCartRepository = shoppingCartRepository;
             OrderHeaderRepository = orderHeaderRepository;
             OrderDetailsRepository = orderDetailsRepository;
+            ApplicationUserRepository = applicationUserRepository;
         }
 
 

@@ -7,6 +7,7 @@ using PresentationLayer.Mapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using PresentationLayer.Helper;
+using Stripe;
 
 namespace PresentationLayer
 {
@@ -21,17 +22,20 @@ namespace PresentationLayer
             builder.Services.AddRazorPages();
             builder.Services.AddDbContext<ApplicationDBContext>(options
                 => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+            builder.Services.Configure<StripeData>(builder.Configuration.GetSection(nameof(Stripe)));
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options
                 =>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromDays(4))
                 .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDBContext>();
-            builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
+            //builder.Services.AddScoped(typeof(IGenericRepository<Product>), typeof(GenericRepository<Product>));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+            builder.Services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
+            builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
+            builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new CategoryProfile()));
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
             builder.Services.AddAutoMapper(C=>C.AddProfile(new CartProfile()));
@@ -51,6 +55,7 @@ namespace PresentationLayer
             app.UseStaticFiles();
 
             app.UseRouting();
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("stripe:Secret key").Get<string>();
             //app.UseAuthentication();
             app.UseAuthorization();
 

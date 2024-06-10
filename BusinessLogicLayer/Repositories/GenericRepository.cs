@@ -64,9 +64,10 @@ namespace BusinessLogicLayer.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public Task<int> DeleteByRange(IEnumerable<T> entities)
+        public async Task<int> DeleteByRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().RemoveRange(entities);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<int> Update(T entity)

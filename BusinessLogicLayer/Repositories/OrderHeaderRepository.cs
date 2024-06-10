@@ -21,7 +21,10 @@ namespace BusinessLogicLayer.Repositories
 
         public void UpdateOrderStatus(int id, string OrderStatus, string PaymentStatus)
         {
-            throw new NotImplementedException();
+            var orderHeader = _context.OrderHeaders.FirstOrDefault(O => O.Id == id);
+            orderHeader.OrderStatus = OrderStatus;
+            orderHeader.PaymentStatus = PaymentStatus;
+            _context.SaveChanges();
         }
     }
 }
