@@ -125,7 +125,7 @@ namespace PresentationLayer.Areas.Customer.Controllers
             shoppingCartViewModel.OrderHeader.PaymentStatus = SD.Pending;
             shoppingCartViewModel.OrderHeader.OrderDate = DateTime.Now;
             shoppingCartViewModel.OrderHeader.ApplicationUserId = claim.Value;
-
+            shoppingCartViewModel.OrderHeader.TotalPrice = shoppingCartViewModel.CartTotalPrice;
 
             //foreach (var item in ShoppingCartViewModel.CartsList)
             //{
