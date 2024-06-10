@@ -46,5 +46,10 @@ namespace BusinessLogicLayer.Repositories
         {
             _context.Dispose();
         }
+
+        //public void Dispose()
+        //{
+        //    
+        //}
     }
 }

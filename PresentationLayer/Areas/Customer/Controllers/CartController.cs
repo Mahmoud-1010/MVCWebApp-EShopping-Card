@@ -180,6 +180,8 @@ namespace PresentationLayer.Areas.Customer.Controllers
             var service = new SessionService();
             Session session = service.Create(options);
             shoppingCartViewModel.OrderHeader.SessionId = session.Id;
+            shoppingCartViewModel.OrderHeader.PaymentIntentId = session.PaymentIntentId;
+            await _unitOfWork.OrderHeaderRepository.Update(shoppingCartViewModel.OrderHeader);
             //_unitOfWork.Complete();
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
@@ -188,14 +190,14 @@ namespace PresentationLayer.Areas.Customer.Controllers
 
         public async Task<IActionResult> OrderConfirmation(int id)
         {
-            OrderHeader orderHeader = await _unitOfWork.OrderHeaderRepository.GetByIdAsync(O => O.Id == id);
+            OrderHeader orderHeader = await _unitOfWork.OrderHeaderRepository.GetByIdAsync(U => U.Id == id);
             var services = new SessionService();
             Session session = services.Get(orderHeader.SessionId);
             if (session.PaymentStatus.ToLower() == "paid")
             {
                 _unitOfWork.OrderHeaderRepository.UpdateOrderStatus(id, SD.Approve, SD.Approve);
-                orderHeader.PaymentIntentId = session.PaymentIntentId;
-                _unitOfWork.Complete();
+                //orderHeader.PaymentIntentId = session.PaymentIntentId;
+                //_unitOfWork.Complete();
             }
 
             var shoppingCarts = await _unitOfWork.ShoppingCartRepository.
