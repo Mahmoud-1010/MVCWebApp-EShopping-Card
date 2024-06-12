@@ -7,5 +7,9 @@
         public static string CustomerRole = "Customer";
         public static string Pending = "Pending";
         public static string Approve = "Approve";
+        public static string Proccessing = "Proccessing";
+        public static string Cancelleed = "Cancelleed";
+        public static string Refund = "Refund";
+        public static string Shipping = "Shipping";
     }
 }
