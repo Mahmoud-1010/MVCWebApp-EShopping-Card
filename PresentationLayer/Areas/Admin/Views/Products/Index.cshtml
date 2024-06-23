@@ -1,16 +1,15 @@
-﻿@model IEnumerable<PresentationLayer.Models.ProductViewModel>
+﻿@model IEnumerable<ProductViewModel>
 
 @{
     ViewBag.PageTitle = "Manage Products";
     ViewBag.CardTitle = "List Of Products";
-    Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New Product</a>
 </p>
-<form class="my-3" asp-action="Index" asp-controller="Categories">
+<form class="my-3" asp-action="Index" >
     <div class="row">
         <div class="col-sm-8">
             <input placeholder="Search By Name" name="SearchValue" class="form-control" />
@@ -23,9 +22,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -35,40 +32,37 @@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.CategoryId)
             </th>
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                    @Html.Raw(item.Description)
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.CategoryId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id  }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>
         </tr>
 }

@@ -2,15 +2,12 @@
 @model PresentationLayer.Models.ProductViewModel
 @inject IUnitOfWork _unitOfWork
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Dashboard.cshtml";
+    ViewBag.PageTitle = "Manage Products";
+    ViewBag.CardTitle = "Create New Product";
     var Categories = new SelectList(await _unitOfWork.CategoryRepository.GetAllAsync(), "Id", "Name");
 }
 
-<h1>Create</h1>
 
-<h4>ProductViewModel</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
@@ -23,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea id="mytextarea" asp-for="Description" class="form-control"></textarea> 
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -56,4 +53,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+   
 }

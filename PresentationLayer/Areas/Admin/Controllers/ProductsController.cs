@@ -55,7 +55,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                productVM.CategoryId = 3;
+                //productVM.CategoryId = 3;
                 productVM.ImageUrl= DocumentSettings.UploadFile(productVM.Image, "Images");
                 Product MappedProduct = Mapper.Map<ProductViewModel, Product>(productVM);
 
@@ -66,6 +66,9 @@ namespace PresentationLayer.Areas.Admin.Controllers
             return View(productVM);
         }
 
-
+        //TO DO
+        //Edit
+        //Update
+        //Delete
     }
 }
