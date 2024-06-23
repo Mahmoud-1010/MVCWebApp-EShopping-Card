@@ -16,7 +16,7 @@
     </div>
 </form>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -27,8 +27,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.CreatedDate)
+            </th>
             <th>Edit</th>
-            @* <th>Details</th> *@
             <th>Delete</th>
         </tr>
     </thead>
@@ -43,14 +45,14 @@
                     @item.Description
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-controller="Categories" asp-route-id="@item.Id" class="btn btn-outline-primary">Edit</a>
+                    @item.CreatedDate
                 </td>
-                @* <td>
-                    <a asp-action="Details" asp-controller="Categories" asp-route-id="@item.Id" class="btn btn-outline-primary">Details</a>
-
-                </td> *@
                 <td>
-                    <a asp-action="Delete" asp-controller="Categories" asp-route-id="@item.Id" class="btn btn-outline-primary">Delete</a>
+                    <a asp-action="Edit" asp-controller="Categories" asp-route-id="@item.Id" class="btn btn-success">Edit</a>
+                </td>
+                
+                <td>
+                    <a asp-action="Delete" asp-controller="Categories" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
 
                 </td>
             </tr>
