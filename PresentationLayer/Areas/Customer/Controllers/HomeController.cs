@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models;
 using System.Security.Claims;
+using X.PagedList;
 
 namespace PresentationLayer.Areas.Customer.Controllers
 {
@@ -21,20 +22,19 @@ namespace PresentationLayer.Areas.Customer.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+            int PageNumber = page ?? 1;
+            int PageSize = 8;
             var products = await _unitOfWork.ProductRepository.GetAllAsync();
             var mappedProducts = Mapper.Map<IEnumerable<Product>, IEnumerable<ProductViewModel>>(products);
-            return View(mappedProducts);
+            return View(mappedProducts.ToPagedList(PageNumber,PageSize));
         }
         public async Task<IActionResult> Details(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetByIdAsync(P => P.Id == id, IncludeWord: "Category");
             ShoppingItemViewModel shoppingItem = Mapper.Map<Product, ShoppingItemViewModel>(product);
             shoppingItem.ProductId = id;
-            //var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            //shoppingItem.ApplicationUserId = claim.Value;
             return View(shoppingItem);
         }
         [HttpPost]
