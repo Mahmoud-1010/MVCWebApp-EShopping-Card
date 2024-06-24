@@ -1,17 +1,16 @@
-﻿@using BusinessLogicLayer.Interfaces
-@model PresentationLayer.Models.ProductViewModel
+﻿@model ProductViewModel
 @inject IUnitOfWork _unitOfWork
 @{
     ViewBag.PageTitle = "Manage Products";
-    ViewBag.CardTitle = "Create New Product";
+    ViewBag.CardTitle = "Edit Product";
     var Categories = new SelectList(ViewBag.categories, "Id", "Name");
 }
 
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input hidden asp-for="Id" />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -20,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea id="mytextarea" asp-for="Description" class="form-control"></textarea> 
+                <textarea id="mytextarea" asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,7 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" onchange="fillImg(event);"/>
+                <input asp-for="Image"  class="form-control" onchange="fillImg(event);" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,14 +40,14 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Edit" class="btn btn-primary" />
             </div>
         </form>
 
     </div>
     <div class="col-md-4">
         <div class="container">
-            <img  id="ImagePreview" width="300" height="300"/>
+            <img id="ImagePreview" src="~/files/Images/@Model.ImageUrl" width="300" height="300" />
         </div>
     </div>
 </div>
@@ -58,11 +57,14 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-   <script>
-       var fillImg = function (event) {
-           var imgHolder = document.getElementById("ImagePreview");
-           imgHolder.src = URL.createObjectURL(event.target.files[0]);
-       }
-   </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+        var fillImg = function (event) {
+            var imgHolder = document.getElementById("ImagePreview");
+            imgHolder.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
 }

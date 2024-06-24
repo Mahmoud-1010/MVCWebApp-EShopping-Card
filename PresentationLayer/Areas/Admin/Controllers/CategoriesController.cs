@@ -42,7 +42,7 @@ namespace PresentationLayer.Areas.Admin.Controllers
         // GET: CategoriesController/Create
         public async Task<ActionResult> Create()
         {
-            return View();
+            return  View();
         }
 
         // POST: CategoriesController/Create
@@ -74,8 +74,6 @@ namespace PresentationLayer.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(CategoryViewModel categoryVM)
         {
-            //if(id!=categoryVM.Id)
-            //    return NotFound();
             if (ModelState.IsValid)
             {
 

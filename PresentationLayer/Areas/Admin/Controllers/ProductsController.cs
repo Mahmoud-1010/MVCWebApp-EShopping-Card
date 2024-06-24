@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PresentationLayer.Helper;
 using PresentationLayer.Models;
 
+
 namespace PresentationLayer.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -68,7 +69,32 @@ namespace PresentationLayer.Areas.Admin.Controllers
 
         //TO DO
         //Edit
-        //Update
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == null) return NotFound();
+            var product = await _UnitOfWork.ProductRepository.GetByIdAsync(p=>p.Id==id);
+            ProductViewModel mappedProduct= Mapper.Map<Product, ProductViewModel>(product);
+            ViewBag.categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
+            return View(mappedProduct);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductViewModel productVM, IFormFile image)
+        {
+            if (ModelState.IsValid)
+            {
+                productVM.ImageUrl = DocumentSettings.UploadFile(productVM.Image, "Images");
+                //Product productFromDb = await _UnitOfWork.ProductRepository.GetByIdAsync(p=> p.Id==productVM.Id);
+                Product MappedProduct = Mapper.Map<ProductViewModel, Product>(productVM);
+
+                await _UnitOfWork.ProductRepository.Update(MappedProduct);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.categories = await _UnitOfWork.CategoryRepository.GetAllAsync();
+            return View(productVM);
+        }
+
+        
         //Delete
     }
 }
