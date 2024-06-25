@@ -1,4 +1,5 @@
-﻿using BusinessLogicLayer.Interfaces;
+﻿using AutoMapper;
+using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,15 @@ namespace PresentationLayer.Areas.Customer.Controllers
     [Area("Customer")]
     public class CartController : Controller
     {
+        private readonly IMapper _mapper;
+
         public IUnitOfWork _unitOfWork { get; }
         public ShoppingCartViewModel ShoppingCartViewModel { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
 
@@ -54,6 +58,14 @@ namespace PresentationLayer.Areas.Customer.Controllers
             {
                 await _unitOfWork.ShoppingCartRepository.DeleteAsync(shoppingCart);
 
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var shoppingCarts = await _unitOfWork.ShoppingCartRepository.
+                        GetAllAsync(x => x.ApplicationUserId == claim.Value);
+                var mapedShoppingCart = _mapper.Map<IEnumerable<ShoppingCart>, List<ShoppingItemViewModel>>(shoppingCarts);
+                HttpContext.Session.SetInt32(SD.SessionKey, mapedShoppingCart.Count());
+
+
             }
             else
             {
@@ -68,6 +80,14 @@ namespace PresentationLayer.Areas.Customer.Controllers
                 GetByIdAsync(C => C.Id == id);
 
             await _unitOfWork.ShoppingCartRepository.DeleteAsync(shoppingCart);
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var shoppingCarts = await _unitOfWork.ShoppingCartRepository.
+                    GetAllAsync(x => x.ApplicationUserId == claim.Value);
+            var mapedShoppingCart = _mapper.Map<IEnumerable<ShoppingCart>, List<ShoppingItemViewModel>>(shoppingCarts);
+            HttpContext.Session.SetInt32(SD.SessionKey, mapedShoppingCart.Count() );
+
             return RedirectToAction(nameof(Index));
 
         }

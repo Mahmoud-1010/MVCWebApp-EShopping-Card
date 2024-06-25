@@ -2,7 +2,9 @@
 using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.Helper;
 using PresentationLayer.Models;
 using System.Security.Claims;
 using X.PagedList;
@@ -54,6 +56,11 @@ namespace PresentationLayer.Areas.Customer.Controllers
             if (cartobj == null)
             {
                 await _unitOfWork.ShoppingCartRepository.InsertAsync(shoppingCart);
+                var shoppingCarts = await _unitOfWork.ShoppingCartRepository.
+                        GetAllAsync(x => x.ApplicationUserId == claim.Value);
+                var mapedShoppingCart = Mapper.Map<IEnumerable<ShoppingCart>, List<ShoppingItemViewModel>>(shoppingCarts);
+                HttpContext.Session.SetInt32(SD.SessionKey, mapedShoppingCart.Count());
+                 //_unitOfWork.Complete();
             }
             else
             {

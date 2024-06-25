@@ -41,6 +41,13 @@ namespace PresentationLayer
             builder.Services.AddAutoMapper(C=>C.AddProfile(new CartProfile()));
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
+
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -56,9 +63,9 @@ namespace PresentationLayer
 
             app.UseRouting();
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("stripe:Secret key").Get<string>();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",

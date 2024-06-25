@@ -11,5 +11,6 @@
         public static string Cancelleed = "Cancelleed";
         public static string Refund = "Refund";
         public static string Shipping = "Shipping";
+        public static string SessionKey = "ShoppingCartSession";
     }
 }
