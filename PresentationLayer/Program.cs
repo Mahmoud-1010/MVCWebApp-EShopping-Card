@@ -23,7 +23,7 @@ namespace PresentationLayer
             builder.Services.AddDbContext<ApplicationDBContext>(options
                 => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.Configure<StripeData>(builder.Configuration.GetSection(nameof(Stripe)));
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options
                 =>options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromDays(4))
                 .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDBContext>();
