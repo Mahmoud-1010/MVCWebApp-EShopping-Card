@@ -1,6 +1,6 @@
 **# E-commerce Application**
 
-**Description**
+Description
 
 This project is a full-stack e-commerce application built with ASP.NET Core MVC, leveraging Entity Framework for database interaction and Microsoft Azure for cloud deployment (optional). It offers a user-friendly platform for selling and managing products, with secure user authentication and a comprehensive admin dashboard.
 
